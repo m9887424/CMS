@@ -1,0 +1,77 @@
+﻿@*@model IList<CMS.Domain.ViewModel.CustomerViewModel>*@
+@*
+    <table border="1">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CustomerID</td>
+                <td>@item.Country</td>
+                <td>@item.CompanyName</td>
+            </tr>
+        }
+
+    </table>
+
+*@
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<div class="row">
+    <!--v-bind:title=bind to title element-->
+    <table class="table table-striped" id="tblemps" v-bind:title="titlemsg" v-on:click="loadData">
+        <thead>
+            <tr>
+                <th><span class="label label-info">ID</span></th>
+                <th><span class="label label-info">國家</span></th>
+                <th><span class="label label-info">公司名稱</span></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr v-for="emp in serveremps">
+                <td>
+                    <span> {{ emp.CustomerID }}</span>
+                </td>
+                <td>
+                    <span> {{ emp.Country }}</span>
+                </td>
+                <td>
+                    <span> {{ emp.CompanyName }}</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+
+
+        $(function () {
+
+            var vtblemps = new Vue({
+                el: '#tblemps',
+                ready: function () {
+                },
+                data: {
+                    titlemsg:'點擊後從Server端取得資料',//linked
+                    serveremps: null
+                },
+                methods: {
+                    loadData: function () {
+                        var apiurl = "/api/Customer";
+                        $.ajax({
+                            url: apiurl,
+                            type: "GET",
+                            success: function (rdatas) {
+                                
+                                vtblemps.serveremps = rdatas ;
+                            },
+                            error: function (jqXHR, errorThrown) {
+                                alert(errorThrown);
+                            }
+                        });
+                    }
+                }
+            })
+        })
+</script>
+
